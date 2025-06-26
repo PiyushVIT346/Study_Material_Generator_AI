@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Topic - AI Study Assistant</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+
+        /* Main container */
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); }
+            to { text-shadow: 0 4px 30px rgba(255, 255, 255, 0.2); }
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Popular topics */
+        .popular-topics {
+            margin-bottom: 2rem;
+        }
+
+        .popular-topics h3 {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .topic-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .topic-chip {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-chip::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .topic-chip:hover::before {
+            left: 100%;
+        }
+
+        .topic-chip:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Form styling */
+        .form-container {
+            position: relative;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            font-style: italic;
+        }
+
+        .input-field:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 0 4px rgba(255, 107, 107, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .input-field:valid {
+            border-color: #4ecdc4;
+        }
+
+        /* Submit button */
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(238, 90, 36, 0.3);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(238, 90, 36, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Loading state */
+        .loading {
+            display: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Character counter */
+        .char-counter {
+            position: absolute;
+            right: 1rem;
+            bottom: -1.5rem;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Back button */
+        .back-btn {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+            z-index: 20;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-3px);
+        }
+
+        /* Difficulty selection */
+        .difficulty-section {
+            margin-bottom: 2rem;
+        }
+
+        .difficulty-section h3 {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .difficulty-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .difficulty-option {
+            cursor: pointer;
+        }
+
+        .difficulty-option input[type="radio"] {
+            display: none;
+        }
+
+        .difficulty-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .difficulty-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .difficulty-card:hover::before {
+            left: 100%;
+        }
+
+        .difficulty-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .difficulty-card.selected {
+            background: rgba(255, 107, 107, 0.2);
+            border-color: #ff6b6b;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .difficulty-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .difficulty-name {
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .difficulty-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            line-height: 1.3;
+            display: block;
+        }
+
+        /* AI suggestions */
+        .ai-suggestions {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid #4ecdc4;
+            display: none;
+        }
+
+        .ai-suggestions.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-suggestions h4 {
+            color: #4ecdc4;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .ai-suggestions p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+            @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .header h2 {
+                font-size: 2rem;
+            }
+
+            .back-btn {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .topic-chips {
+                gap: 0.5rem;
+            }
+
+            .topic-chip {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .difficulty-options {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .difficulty-card {
+                padding: 1.25rem 1rem;
+            }
+        }
+
+        /* Success animation */
+        .success-animation {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(76, 175, 80, 0.95);
+            color: white;
+            padding: 2rem;
+            border-radius: 16px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .success-animation.show {
+            display: block;
+            animation: successPop 0.6s ease-out;
+        }
+
+        @keyframes successPop {
+            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Back button -->
+    <button class="back-btn" onclick="goBack()">
+        ← Back to Home
+    </button>
+
+    <!-- Main container -->
+    <div class="container">
+        <div class="header">
+            <h2>🧠 Enter a Topic to Study</h2>
+            <p class="subtitle">
+                Tell us what you'd like to learn and we'll create personalized study materials and quizzes just for you!
+            </p>
+        </div>
+
+        <!-- Popular topics -->
+        <div class="popular-topics">
+            <h3>✨ Popular Topics</h3>
+            <div class="topic-chips">
+                <span class="topic-chip" onclick="selectTopic('Machine Learning')">Machine Learning</span>
+                <span class="topic-chip" onclick="selectTopic('Neural Networks')">Neural Networks</span>
+                <span class="topic-chip" onclick="selectTopic('Data Structures')">Data Structures</span>
+                <span class="topic-chip" onclick="selectTopic('Photosynthesis')">Photosynthesis</span>
+                <span class="topic-chip" onclick="selectTopic('World History')">World History</span>
+                <span class="topic-chip" onclick="selectTopic('Calculus')">Calculus</span>
+                <span class="topic-chip" onclick="selectTopic('Chemistry')">Chemistry</span>
+                <span class="topic-chip" onclick="selectTopic('Physics')">Physics</span>
+            </div>
+        </div>
+
+        <!-- Form -->
+        <form method="post" onsubmit="handleSubmit(event)" class="form-container">
+            <div class="input-group">
+                <input 
+                    type="text" 
+                    name="topic" 
+                    id="topicInput"
+                    class="input-field"
+                    placeholder="e.g., Neural Networks, Quantum Physics, Renaissance Art..."
+                    required
+                    maxlength="100"
+                    oninput="handleInput(this)"
+                    autocomplete="off"
+                >
+                <div class="char-counter">
+                    <span id="charCount">0</span>/100
+                </div>
+            </div>
+
+            <!-- Difficulty Selection -->
+            <div class="difficulty-section">
+                <h3>📊 Select Difficulty Level</h3>
+                <div class="difficulty-options">
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="beginner" onchange="selectDifficulty(this)">
+                        <div class="difficulty-card">
+                            <span class="difficulty-icon">🌱</span>
+                            <span class="difficulty-name">Beginner</span>
+                            <span class="difficulty-desc">Basic concepts & simple explanations</span>
+                        </div>
+                    </label>
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="intermediate" checked onchange="selectDifficulty(this)">
+                        <div class="difficulty-card selected">
+                            <span class="difficulty-icon">🎯</span>
+                            <span class="difficulty-name">Intermediate</span>
+                            <span class="difficulty-desc">Moderate depth with examples</span>
+                        </div>
+                    </label>
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="advanced" onchange="selectDifficulty(this)">
+                        <div class="difficulty-card">
+                            <span class="difficulty-icon">🚀</span>
+                            <span class="difficulty-name">Advanced</span>
+                            <span class="difficulty-desc">Complex concepts & detailed analysis</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- AI Suggestions -->
+            <div class="ai-suggestions" id="aiSuggestions">
+                <h4>💡 AI Suggestion</h4>
+                <p id="suggestionText">Try being more specific for better results!</p>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="loading" id="loadingSpinner"></span>
+                <span id="btnText">Generate Study Material</span>
+            </button>
+        </form>
+    </div>
+
+    <!-- Success animation -->
+    <div class="success-animation" id="successAnimation">
+        <h3>🎉 Topic Received!</h3>
+        <p>Generating your personalized study materials...</p>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particles = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particles.appendChild(particle);
+            }
+        }
+
+        // Select topic from chips
+        function selectTopic(topic) {
+            const input = document.getElementById('topicInput');
+            input.value = topic;
+            input.focus();
+            handleInput(input);
+            
+            // Add visual feedback
+            event.target.style.background = 'rgba(255, 107, 107, 0.3)';
+            setTimeout(() => {
+                event.target.style.background = 'rgba(255, 255, 255, 0.1)';
+            }, 200);
+        }
+
+        // Handle input changes
+        function handleInput(input) {
+            const charCount = document.getElementById('charCount');
+            const aiSuggestions = document.getElementById('aiSuggestions');
+            const suggestionText = document.getElementById('suggestionText');
+            
+            // Update character counter
+            charCount.textContent = input.value.length;
+            
+            // Show/hide AI suggestions based on input
+            if (input.value.length > 0) {
+                let suggestion = '';
+                const value = input.value.toLowerCase();
+                
+                if (value.length < 3) {
+                    suggestion = 'Try adding more details for better study materials!';
+                } else if (value.includes('science') || value.includes('math')) {
+                    suggestion = 'Great choice! Science and math topics work excellently with our AI.';
+                } else if (value.includes('history') || value.includes('literature')) {
+                    suggestion = 'Perfect! Historical and literary topics generate rich study content.';
+                } else if (value.length > 50) {
+                    suggestion = 'That\'s very detailed! Our AI will create comprehensive materials.';
+                } else {
+                    suggestion = 'Excellent topic choice! This will generate great study materials.';
+                }
+                
+                suggestionText.textContent = suggestion;
+                aiSuggestions.classList.add('show');
+            } else {
+                aiSuggestions.classList.remove('show');
+            }
+        }
+
+        // Handle form submission
+        function handleSubmit(event) {
+            const topic = document.getElementById('topicInput').value.trim();
+            const selectedDifficulty = document.querySelector('input[name="difficulty"]:checked').value;
+            
+            if (!topic) {
+                event.preventDefault();
+                alert('Please enter a topic to study!');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const btnText = document.getElementById('btnText');
+            
+            submitBtn.disabled = true;
+            loadingSpinner.style.display = 'inline-block';
+            btnText.textContent = 'Processing...';
+            
+            // Let the form submit naturally to Flask
+            // The loading state will be visible during the redirect
+        }
+
+        // Select difficulty level
+        function selectDifficulty(radio) {
+            // Remove selected class from all cards
+            document.querySelectorAll('.difficulty-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            
+            // Add selected class to the chosen card
+            radio.parentElement.querySelector('.difficulty-card').classList.add('selected');
+            
+            // Update AI suggestions based on difficulty
+            const difficulty = radio.value;
+            const aiSuggestions = document.getElementById('aiSuggestions');
+            const suggestionText = document.getElementById('suggestionText');
+            
+            let suggestion = '';
+            switch(difficulty) {
+                case 'beginner':
+                    suggestion = 'Perfect for starting out! We\'ll focus on fundamental concepts and clear explanations.';
+                    break;
+                case 'intermediate':
+                    suggestion = 'Great choice! We\'ll provide balanced content with practical examples and moderate depth.';
+                    break;
+                case 'advanced':
+                    suggestion = 'Excellent! We\'ll create comprehensive materials with complex analysis and detailed explanations.';
+                    break;
+            }
+            
+            suggestionText.textContent = suggestion;
+            aiSuggestions.classList.add('show');
+        }
+
+        // Go back function
+        function goBack() {
+            if (confirm('Are you sure you want to go back? Any entered information will be lost.')) {
+                window.history.back();
+            }
+        }
+
+        // Parallax effect for particles
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const particles = document.querySelectorAll('.particle');
+            particles.forEach((particle, index) => {
+                const speed = (index % 3 + 1) * 0.3;
+                particle.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+        });
+
+        // Initialize particles when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            createParticles();
+            
+            // Focus on input after page loads
+            setTimeout(() => {
+                document.getElementById('topicInput').focus();
+            }, 500);
+        });
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(event) {
+            // ESC to go back
+            if (event.key === 'Escape') {
+                goBack();
+            }
+            
+            // Enter to submit (if input is focused)
+            if (event.key === 'Enter' && document.activeElement.id === 'topicInput') {
+                event.preventDefault();
+                document.getElementById('submitBtn').click();
+            }
+        });
+    </script>
+</body>
+</html>

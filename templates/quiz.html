@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI & ML Quiz - StudyMate</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h1 {
+      color: white;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .quiz-emoji {
+      font-size: 3rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+
+    .quiz-form {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quiz-form::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c);
+      background-size: 300% 100%;
+      animation: gradient 3s ease infinite;
+    }
+
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+      margin-bottom: 30px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .question-block {
+      margin-bottom: 30px;
+      padding: 25px;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 15px;
+      border-left: 5px solid #667eea;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .question-block:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .question-block.answered {
+      border-left-color: #48bb78;
+      background: linear-gradient(135deg, #f0fff4 0%, #e6fffa 100%);
+    }
+
+    .question-number {
+      position: absolute;
+      top: -10px;
+      left: 20px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+    }
+
+    .question-block h3 {
+      color: #2d3748;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      margin-top: 10px;
+      line-height: 1.5;
+    }
+
+    .options-container {
+      display: grid;
+      gap: 12px;
+    }
+
+    .option {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .option label {
+      display: flex;
+      align-items: center;
+      padding: 15px 20px;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
+      color: #4a5568;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .option label::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .option label:hover::before {
+      left: 100%;
+    }
+
+    .option label:hover {
+      border-color: #667eea;
+      background: #f7fafc;
+      transform: translateX(5px);
+    }
+
+    .option input[type="radio"] {
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e0;
+      border-radius: 50%;
+      margin-right: 15px;
+      position: relative;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .option input[type="radio"]:checked {
+      border-color: #667eea;
+      background: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    }
+
+    .option input[type="radio"]:checked::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+    }
+
+    .option input[type="radio"]:checked + span {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .submit-button {
+      width: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 18px 40px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
+      margin-top: 30px;
+    }
+
+    .submit-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .submit-button:hover::before {
+      left: 100%;
+    }
+
+    .submit-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-button:active {
+      transform: translateY(0);
+    }
+
+    .submit-button:disabled {
+      background: #cbd5e0;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 15px 20px;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 10px;
+      border: 1px solid rgba(102, 126, 234, 0.2);
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #667eea;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: #718096;
+      font-weight: 500;
+    }
+
+    .error-message {
+      text-align: center;
+      color: #e53e3e;
+      font-size: 1.2rem;
+      padding: 40px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      border-left: 5px solid #e53e3e;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .quiz-form {
+        padding: 25px;
+      }
+
+      .question-block {
+        padding: 20px;
+      }
+
+      .question-block h3 {
+        font-size: 1.1rem;
+      }
+
+      .option label {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+      }
+
+      .quiz-stats {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
+
+    /* Animation for question appearance */
+    .question-block {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: slideInUp 0.5s ease forwards;
+    }
+
+    @keyframes slideInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Stagger animation for questions */
+    .question-block:nth-child(1) { animation-delay: 0.1s; }
+    .question-block:nth-child(2) { animation-delay: 0.2s; }
+    .question-block:nth-child(3) { animation-delay: 0.3s; }
+    .question-block:nth-child(4) { animation-delay: 0.4s; }
+    .question-block:nth-child(5) { animation-delay: 0.5s; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>
+        <span class="quiz-emoji">🧠</span>
+        AI & ML Quiz
+      </h1>
+      <p class="subtitle">Test your knowledge and challenge yourself!</p>
+    </div>
+
+    {% if quiz %}
+    <form method="POST" action="/submit" class="quiz-form" id="quizForm">
+      <div class="quiz-stats">
+        <div class="stat-item">
+          <div class="stat-number" id="totalQuestions">{{ quiz|length }}</div>
+          <div class="stat-label">Total Questions</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="answeredCount">0</div>
+          <div class="stat-label">Answered</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" id="progressPercent">0%</div>
+          <div class="stat-label">Progress</div>
+        </div>
+      </div>
+
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      {% for q in quiz %}
+        {% set q_index = loop.index0 %}
+        <div class="question-block" data-question="{{ q_index }}">
+          <div class="question-number">Question {{ loop.index }}</div>
+          <h3>{{ q.question }}</h3>
+          <div class="options-container">
+            {% for opt in q.options %}
+              <div class="option">
+                <label>
+                  <input type="radio" name="q{{ q_index }}" value="{{ opt }}" required>
+                  <span>{{ opt }}</span>
+                </label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="submit-button" id="submitBtn">
+        🚀 Submit Quiz
+      </button>
+    </form>
+    {% else %}
+      <div class="error-message">
+        <h2>📭 Quiz Not Available</h2>
+        <p>Sorry, the quiz data is currently not available. Please try again later.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('quizForm');
+      const totalQuestions = {{ quiz|length if quiz else 0 }};
+      const answeredCountEl = document.getElementById('answeredCount');
+      const progressPercentEl = document.getElementById('progressPercent');
+      const progressFillEl = document.getElementById('progressFill');
+      const submitBtn = document.getElementById('submitBtn');
+
+      function updateProgress() {
+        const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+        const progressPercent = Math.round((answeredQuestions / totalQuestions) * 100);
+        
+        answeredCountEl.textContent = answeredQuestions;
+        progressPercentEl.textContent = progressPercent + '%';
+        progressFillEl.style.width = progressPercent + '%';
+
+        // Update question blocks
+        document.querySelectorAll('.question-block').forEach((block, index) => {
+          const questionInputs = block.querySelectorAll('input[type="radio"]');
+          const isAnswered = Array.from(questionInputs).some(input => input.checked);
+          
+          if (isAnswered) {
+            block.classList.add('answered');
+          } else {
+            block.classList.remove('answered');
+          }
+        });
+
+        // Enable/disable submit button
+        if (answeredQuestions === totalQuestions) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = '🎉 Submit Quiz';
+        } else {
+          submitBtn.disabled = true;
+          submitBtn.textContent = `📝 Answer ${totalQuestions - answeredQuestions} more question${totalQuestions - answeredQuestions !== 1 ? 's' : ''}`;
+        }
+      }
+
+      // Add event listeners to all radio buttons
+      document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', updateProgress);
+      });
+
+      // Form submission
+      form.addEventListener('submit', function(e) {
+        submitBtn.innerHTML = '<div style="display: inline-block; width: 20px; height: 20px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-right: 10px;"></div>Submitting...';
+        submitBtn.disabled = true;
+      });
+
+      // Initial progress update
+      updateProgress();
+    });
+
+    // Add CSS for spinner animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

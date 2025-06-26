@@ -1,0 +1,178 @@
+[
+    {
+        "question": "What is the primary goal of linear regression?",
+        "options": [
+            "To classify data into categories",
+            "To predict a continuous output variable",
+            "To cluster similar data points",
+            "To reduce dimensionality"
+        ],
+        "correct_answer": "To predict a continuous output variable",
+        "explanation": "Linear regression aims to predict a continuous output variable based on one or more input features."
+    },
+    {
+        "question": "What is the term for a model that is too complex and performs well on training data but poorly on new data?",
+        "options": [
+            "Underfitting",
+            "Overfitting",
+            "Bias-Variance Tradeoff",
+            "Regularization"
+        ],
+        "correct_answer": "Overfitting",
+        "explanation": "Overfitting occurs when a model is too complex and performs well on training data but poorly on new data."
+    },
+    {
+        "question": "What is the purpose of regularization techniques in machine learning?",
+        "options": [
+            "To increase model complexity",
+            "To reduce overfitting",
+            "To improve model interpretability",
+            "To increase training speed"
+        ],
+        "correct_answer": "To reduce overfitting",
+        "explanation": "Regularization techniques help prevent overfitting by adding a penalty term to the loss function."
+    },
+    {
+        "question": "What is the name of the algorithm that combines multiple decision trees to improve accuracy and reduce overfitting?",
+        "options": [
+            "Random Forest",
+            "Decision Tree",
+            "Gradient Boosting",
+            "Neural Network"
+        ],
+        "correct_answer": "Random Forest",
+        "explanation": "Random Forest is an ensemble method that combines multiple decision trees to improve accuracy and reduce overfitting."
+    },
+    {
+        "question": "What is the term for the process of selecting the optimal hyperparameters for a machine learning model?",
+        "options": [
+            "Model Evaluation",
+            "Hyperparameter Tuning",
+            "Feature Engineering",
+            "Model Selection"
+        ],
+        "correct_answer": "Hyperparameter Tuning",
+        "explanation": "Hyperparameter tuning involves selecting the optimal hyperparameters for a machine learning model to improve its performance."
+    },
+    {
+        "question": "What is the name of the graph that shows the performance of a classification model at different thresholds?",
+        "options": [
+            "ROC Curve",
+            "Precision-Recall Curve",
+            "Confusion Matrix",
+            "Lift Chart"
+        ],
+        "correct_answer": "ROC Curve",
+        "explanation": "The ROC curve shows the performance of a classification model at different thresholds, plotting true positive rate against false positive rate."
+    },
+    {
+        "question": "What is the term for the field of study focused on the interaction between computers and human language?",
+        "options": [
+            "Artificial Intelligence",
+            "Machine Learning",
+            "Natural Language Processing",
+            "Deep Learning"
+        ],
+        "correct_answer": "Natural Language Processing",
+        "explanation": "Natural Language Processing (NLP) is the field of study focused on the interaction between computers and human language."
+    },
+    {
+        "question": "What is the name of the technique used to understand and explain the decisions made by machine learning models?",
+        "options": [
+            "Model Interpretability",
+            "Model Explainability",
+            "Feature Importance",
+            "Partial Dependence Plots"
+        ],
+        "correct_answer": "Model Interpretability",
+        "explanation": "Model interpretability involves techniques used to understand and explain the decisions made by machine learning models."
+    },
+    {
+        "question": "What is the primary advantage of using an ensemble method like random forest over a single decision tree?",
+        "options": [
+            "Improved interpretability",
+            "Increased complexity",
+            "Reduced overfitting",
+            "Faster training speed"
+        ],
+        "correct_answer": "Reduced overfitting",
+        "explanation": "Ensemble methods like random forest reduce overfitting by combining multiple decision trees, leading to improved generalization performance."
+    },
+    {
+        "question": "What is the term for the type of machine learning algorithm that predicts a continuous output variable?",
+        "options": [
+            "Regression",
+            "Classification",
+            "Clustering",
+            "Dimensionality Reduction"
+        ],
+        "correct_answer": "Regression",
+        "explanation": "Regression algorithms predict a continuous output variable based on one or more input features."
+    },
+    {
+        "question": "What is the purpose of cross-validation in machine learning?",
+        "options": [
+            "To evaluate model performance on new data",
+            "To tune hyperparameters",
+            "To reduce overfitting",
+            "To improve model interpretability"
+        ],
+        "correct_answer": "To evaluate model performance on new data",
+        "explanation": "Cross-validation involves evaluating model performance on multiple subsets of data to estimate its performance on new, unseen data."
+    },
+    {
+        "question": "What is the term for the type of machine learning algorithm that groups similar data points into clusters?",
+        "options": [
+            "Regression",
+            "Classification",
+            "Clustering",
+            "Dimensionality Reduction"
+        ],
+        "correct_answer": "Clustering",
+        "explanation": "Clustering algorithms group similar data points into clusters based on their features."
+    },
+    {
+        "question": "What is the name of the technique used to reduce the dimensionality of high-dimensional data?",
+        "options": [
+            "Feature Selection",
+            "Feature Engineering",
+            "Dimensionality Reduction",
+            "Data Transformation"
+        ],
+        "correct_answer": "Dimensionality Reduction",
+        "explanation": "Dimensionality reduction techniques, such as PCA and t-SNE, reduce the number of features in high-dimensional data."
+    },
+    {
+        "question": "What is the primary advantage of using deep learning architectures like CNNs and RNNs?",
+        "options": [
+            "Improved interpretability",
+            "Increased training speed",
+            "Improved performance on sequential data",
+            "Reduced overfitting"
+        ],
+        "correct_answer": "Improved performance on sequential data",
+        "explanation": "Deep learning architectures like CNNs and RNNs are particularly well-suited for sequential data, such as images and text."
+    },
+    {
+        "question": "What is the term for the type of machine learning algorithm that predicts a class label or category?",
+        "options": [
+            "Regression",
+            "Classification",
+            "Clustering",
+            "Dimensionality Reduction"
+        ],
+        "correct_answer": "Classification",
+        "explanation": "Classification algorithms predict a class label or category based on one or more input features."
+    },
+    {
+        "question": "What is the purpose of SHAP values in machine learning?",
+        "options": [
+            "To evaluate model performance",
+            "To explain model predictions",
+            "To tune hyperparameters",
+            "To reduce overfitting"
+        ],
+        "correct_answer": "To explain model predictions",
+        "explanation": "SHAP values provide local interpretability of machine learning model predictions, explaining the contribution of each feature to the predicted output."
+    }
+]
